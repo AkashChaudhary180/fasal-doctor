@@ -1,0 +1,94 @@
+// Prisma Schema for Fasal Doctor
+// Supports PostgreSQL (with PostGIS or geospatial coords) or MongoDB
+
+datasource db {
+  provider = "postgresql" // Switch to "mongodb" if using Mongo
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Language {
+  hi // Hindi
+  pa // Punjabi
+  en // English
+}
+
+model User {
+  id                String        @id @default(uuid())
+  phoneNumber       String        @unique
+  name              String?
+  preferredLanguage Language      @default(hi)
+  latitude          Float?
+  longitude         Float?
+  state             String?
+  district          String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  scans             ScanHistory[]
+
+  @@map("users")
+}
+
+model Disease {
+  id             String        @id @default(uuid())
+  code           String        @unique // e.g. "wheat_yellow_rust"
+  englishName    String
+  localNameHindi String
+  localNamePunjabi String
+  cropType       String        // e.g. "Wheat", "Rice", "Tomato", "Cotton", "Mustard"
+  symptoms       String[]
+  organicRemedy  String
+  chemicalRemedy String
+  prevention     String
+  severityLevel  String        // "LOW", "MEDIUM", "HIGH", "CRITICAL"
+  referenceImage String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  scans          ScanHistory[]
+
+  @@map("diseases")
+}
+
+model ScanHistory {
+  id              String   @id @default(uuid())
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  imageUrl        String
+  diagnosedCrop   String
+  diseaseId       String?
+  disease         Disease? @relation(fields: [diseaseId], references: [id])
+  confidenceScore Float
+  diagnosisNotes  String?
+  remedyText      String
+  audioUrl        String?
+  latitude        Float?
+  longitude       Float?
+  scannedAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([diseaseId])
+  @@map("scan_histories")
+}
+
+model AgriStore {
+  id              String   @id @default(uuid())
+  name            String
+  phone           String
+  address         String
+  district        String
+  state           String
+  latitude        Float
+  longitude       Float
+  rating          Float    @default(4.5)
+  openingHours    String   @default("08:00 AM - 07:00 PM")
+  availableStock  String[] // e.g. ["Neem Oil (1L)", "Mancozeb 75% WP", "Bio-Fungicide Trichoderma", "Copper Oxychloride"]
+  verifiedKisanKendra Boolean @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([latitude, longitude])
+  @@map("agri_stores")
+}

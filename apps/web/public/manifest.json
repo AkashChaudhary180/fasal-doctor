@@ -1,0 +1,37 @@
+{
+  "name": "Fasal Doctor - फसल डॉक्टर - ਫਸਲ ਡਾਕਟਰ",
+  "short_name": "Fasal Doctor",
+  "description": "AI-Powered Crop Disease Diagnosis & Agri Store Locator for Indian Farmers",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e2d1d",
+  "theme_color": "#16a34a",
+  "lang": "hi",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scan Crop (फसल जांचें)",
+      "url": "/?tab=scan",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Agri Stores (दुकानें खोजें)",
+      "url": "/?tab=stores",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

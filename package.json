@@ -1,0 +1,28 @@
+{
+  "name": "fasal-doctor-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fasal Doctor - AI Crop Diagnostic PWA for Indian Farmers",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:server": "npm run dev --workspace=apps/server",
+    "build": "npm run build --workspaces",
+    "start": "npm run start --workspaces",
+    "seed": "npm run seed --workspace=apps/server"
+  },
+  "keywords": [
+    "fasal-doctor",
+    "agriculture",
+    "pwa",
+    "nextjs",
+    "express",
+    "ai-crop-diagnosis",
+    "india"
+  ],
+  "author": "Fasal Doctor Team",
+  "license": "MIT"
+}
