@@ -183,7 +183,8 @@ export class AIVisionService {
       ],
       generationConfig: {
         temperature: 0.1,
-        maxOutputTokens: 2048,
+        maxOutputTokens: 4096,
+        responseMimeType: 'application/json',
       },
     };
 
