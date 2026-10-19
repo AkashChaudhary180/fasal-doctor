@@ -15,6 +15,13 @@ Carefully analyze this crop leaf/plant photo. Identify:
 8. Severity level: LOW, MEDIUM, HIGH, or CRITICAL
 9. A short, empathetic spoken audio script for the farmer in Hindi and Punjabi
 
+IMPORTANT OUTPUT RULES:
+- Keep the response concise.
+- Maximum 3 symptoms per language.
+- Keep each remedy and prevention field to 1-2 short sentences.
+- Do not add any extra fields.
+- Do not include markdown or explanation outside the JSON.
+
 IMPORTANT: Base your diagnosis STRICTLY on what you actually see in the image. Do NOT guess randomly.
 
 Return ONLY strictly valid JSON with NO markdown, NO explanation, JUST the JSON object:
@@ -183,7 +190,7 @@ export class AIVisionService {
       ],
       generationConfig: {
         temperature: 0.1,
-        maxOutputTokens: 4096,
+        maxOutputTokens: 8192,
         responseMimeType: 'application/json',
       },
     };
@@ -197,8 +204,24 @@ export class AIVisionService {
     if (!text) return null;
 
     // Strip any accidental markdown fences if model ignores responseMimeType
-    const cleaned = text.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
-    return JSON.parse(cleaned) as DiagnosisResult;
+    const cleaned = text
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim();
+
+    try {
+      return JSON.parse(cleaned) as DiagnosisResult;
+    } catch (parseError: any) {
+      console.warn(
+        `[AIVision] Gemini returned invalid JSON: ${parseError.message}`
+      );
+      console.warn(`[AIVision] Gemini response length: ${cleaned.length}`);
+      console.warn(
+        `[AIVision] Gemini response preview: ${cleaned.slice(0, 500)}`
+      );
+      return null;
+    }
   }
 
   /**
